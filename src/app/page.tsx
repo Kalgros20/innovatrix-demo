@@ -1,4 +1,5 @@
 "use client";
+
 import type {
   CallbackImage,
   FaceCallback,
@@ -9,8 +10,9 @@ import ComponentSelect from "./components/ComponentSelect";
 import PhotoResult from "./components/PhotoResult";
 import styles from "./styles/index.module.css";
 import { Step } from "./types";
-import PalmCapture from "./components/PalmCapture";
-import FaceAutoCapture from "./components/FaceAutoCapture";
+import dynamic from "next/dynamic";
+
+const FaceAutoCapture = dynamic(() => import('./components/FaceAutoCapture'), { ssr: false });
 
 function App() {
   const [step, setStep] = useState<Step>(Step.SELECT_COMPONENT);
