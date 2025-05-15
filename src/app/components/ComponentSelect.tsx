@@ -1,0 +1,38 @@
+import { Step } from "../types";
+import "./button.css";
+
+interface Props {
+  setStep: (step: Step) => void;
+}
+
+function ComponentSelect({ setStep }: Props) {
+  const handleDocumentClick = () => {
+    setStep(Step.DOCUMENT_CAPTURE);
+  };
+
+  const handleFaceClick = () => {
+    setStep(Step.FACE_CAPTURE);
+  };
+
+  const handlePalmClick = () => {
+    setStep(Step.PALM_CAPTURE);
+  };
+
+  const handleMagnifEyeLivenessClick = () => {
+    setStep(Step.MAGNIFEYE_LIVENESS);
+  };
+
+  const handleSmileLivenessClick = () => {
+    setStep(Step.SMILE_LIVENESS);
+  };
+
+  return (
+    <div>
+      <button className={"primary"} onClick={handleFaceClick}>
+        Face
+      </button>
+    </div>
+  );
+}
+
+export default ComponentSelect;

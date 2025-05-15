@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.container {
+  max-width: 50rem;
+  margin: .5rem auto;
+  position: relative;
+  overflow: hidden;
+} 
