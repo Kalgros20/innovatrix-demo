@@ -1,4 +1,5 @@
-import "../index.css";
+"use client";
+import styles from "../styles/index.module.css";
 
 interface Props {
   photoUrl?: string;
@@ -6,7 +7,7 @@ interface Props {
 
 function PhotoResult({ photoUrl = "" }: Props) {
   return (
-    <div className={"container"}>
+    <div className={styles.container}>
       <img alt="Web component result" src={photoUrl} />
     </div>
   );

@@ -1,5 +1,7 @@
+"use client";
+
 import { Step } from "../types";
-import "./button.css";
+import styles from "../styles/button.module.css";
 
 interface Props {
   setStep: (step: Step) => void;
@@ -28,8 +30,20 @@ function ComponentSelect({ setStep }: Props) {
 
   return (
     <div>
-      <button className={"primary"} onClick={handleFaceClick}>
+      <button className={styles.primary} onClick={handleFaceClick}>
         Face
+      </button>
+      <button className={styles.primary} onClick={handleDocumentClick}>
+        Document
+      </button>
+      <button className={styles.primary} onClick={handlePalmClick}>
+        Palm
+      </button>
+      <button className={styles.primary} onClick={handleMagnifEyeLivenessClick}>
+        MagnifEye Liveness
+      </button>
+      <button className={styles.primary} onClick={handleSmileLivenessClick}>
+        Smile Liveness
       </button>
     </div>
   );

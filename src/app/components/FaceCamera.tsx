@@ -1,27 +1,31 @@
 "use client";
 
-// import type {
-//   FaceCameraProps,
-//   HTMLFaceCaptureElement,
-// } from "@innovatrics/dot-face-auto-capture";
-import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import "@innovatrics/dot-face-auto-capture";
+import type {
+  FaceCameraProps,
+  HTMLFaceCaptureElement,
+} from "@innovatrics/dot-face-auto-capture";
+import { useEffect } from "react";
 
-const FaceAutoCapture = dynamic(
-  () => import("@innovatrics/dot-face-auto-capture"),
-  { ssr: false } // Desabilita o SSR para esse componente
-);
+/*
+ * When component is initiliazed, sam.wasm file will be fetched from http://localhost:3000/sam.wasm.
+ * That's why sam.wasm file need to be placed in root of public folder.
+ */
 
-function FaceCamera(props) {
-  const faceCaptureRef = useRef(null);
-
+function FaceCamera(props: FaceCameraProps) {
   useEffect(() => {
-    if (faceCaptureRef.current) {
-      faceCaptureRef.current.cameraOptions = props;
-    }
-  }, [props]); // Atualiza se props mudar
+    // 2. Init existed custom web-component
+    const faceAutoCaptureHTMLElement = document.getElementById(
+      "x-dot-face-auto-capture"
+    ) as HTMLFaceCaptureElement | null;
 
-  return <x-dot-face-auto-capture ref={faceCaptureRef} />;
+    if (faceAutoCaptureHTMLElement) {
+      faceAutoCaptureHTMLElement.cameraOptions = props;
+    }
+  });
+
+  // 1. Return empty custom web-component html TAG
+  return <x-dot-face-auto-capture id="x-dot-face-auto-capture" />;
 }
 
 export default FaceCamera;

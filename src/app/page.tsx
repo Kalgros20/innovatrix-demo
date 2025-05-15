@@ -1,11 +1,16 @@
-"use client"
-import type { FaceCallback, CallbackImage } from "@innovatrics/dot-face-auto-capture";
+"use client";
+import type {
+  CallbackImage,
+  FaceCallback,
+} from "@innovatrics/dot-face-auto-capture";
 import { useCallback, useState } from "react";
 import ComponentSelect from "./components/ComponentSelect";
-import FaceAutoCapture from "./components/FaceAutoCapture";
+
 import PhotoResult from "./components/PhotoResult";
-import "./index.css";
+import styles from "./styles/index.module.css";
 import { Step } from "./types";
+import PalmCapture from "./components/PalmCapture";
+import FaceAutoCapture from "./components/FaceAutoCapture";
 
 function App() {
   const [step, setStep] = useState<Step>(Step.SELECT_COMPONENT);
@@ -20,9 +25,16 @@ function App() {
   };
 
   const handleFaceCapturePhotoTaken: FaceCallback = (imageData, content) => {
+
+    var reader = new FileReader();
+    reader.readAsDataURL(imageData.image);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      console.log(base64data);
+    };
+
     handlePhotoTaken(imageData, content);
   };
-
 
   const handleError = useCallback((error: Error) => {
     alert(error);
@@ -50,7 +62,7 @@ function App() {
   };
 
   return (
-    <div className={"app"}>
+    <div className={styles.app}>
       <h1>DOT Web Components Integration</h1>
       {renderStep(step)}
       {photoUrl && <PhotoResult photoUrl={photoUrl} />}

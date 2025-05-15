@@ -1,38 +1,36 @@
-"use client";
-
-import type {
-  FaceCallback,
-  FaceComponentData,
-} from "@innovatrics/dot-face-auto-capture";
+import { SmileLivenessCallback } from "@innovatrics/dot-smile-liveness";
+import { useState } from "react";
 import {
   dispatchControlEvent,
-  FaceCustomEvent,
+  SmileCustomEvent,
   ControlEventInstruction,
-} from "@innovatrics/dot-face-auto-capture/events";
-import { useState } from "react";
+} from "@innovatrics/dot-smile-liveness/events";
 import styles from "../styles/index.module.css";
 import buttonStyles from "../styles/button.module.css";
-import FaceCamera from "./FaceCamera";
-import FaceUi from "./FaceUi";
+import SmileLivenessCamera from "./SmileLivenessCamera";
+import SmileLivenessUi from "./SmileLivenessUi";
 
 interface Props {
-  onPhotoTaken: FaceCallback;
+  onComplete: SmileLivenessCallback;
   onError: (error: Error) => void;
   onBackClick: () => void;
 }
 
-function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
+function SmileLiveness({ onBackClick, onComplete, onError }: Props) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const handlePhotoTaken: FaceCallback = async (imageData, content) => {
+  const handleOnComplete: SmileLivenessCallback = async (
+    imageData,
+    content,
+  ) => {
     setIsButtonDisabled(false);
-    onPhotoTaken(imageData, content);
+    onComplete(imageData, content);
   };
 
   const handleContinueDetection = () => {
     dispatchControlEvent(
-      FaceCustomEvent.CONTROL,
-      ControlEventInstruction.CONTINUE_DETECTION
+      SmileCustomEvent.CONTROL,
+      ControlEventInstruction.CONTINUE_DETECTION,
     );
 
     setIsButtonDisabled(true);
@@ -40,7 +38,7 @@ function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
 
   return (
     <>
-      <h2>Face auto capture</h2>
+      <h2>Smile Liveness</h2>
       <div>
         <button className={buttonStyles.primary} onClick={onBackClick}>
           Go back
@@ -54,15 +52,11 @@ function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
         </button>
       </div>
       <div className={styles.container}>
-        <FaceCamera
-          cameraFacing="user"
-          onPhotoTaken={handlePhotoTaken}
-          onError={onError}
-        />
-        <FaceUi showCameraButtons />
+        <SmileLivenessCamera onComplete={handleOnComplete} onError={onError} />
+        <SmileLivenessUi showCameraButtons />
       </div>
     </>
   );
 }
 
-export default FaceAutoCapture;
+export default SmileLiveness;

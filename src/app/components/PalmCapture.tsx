@@ -1,38 +1,36 @@
-"use client";
-
 import type {
-  FaceCallback,
-  FaceComponentData,
-} from "@innovatrics/dot-face-auto-capture";
+  PalmCallback,
+  PalmComponentData,
+} from "@innovatrics/dot-palm-capture";
 import {
   dispatchControlEvent,
-  FaceCustomEvent,
+  PalmCustomEvent,
   ControlEventInstruction,
-} from "@innovatrics/dot-face-auto-capture/events";
+} from "@innovatrics/dot-palm-capture/events";
 import { useState } from "react";
 import styles from "../styles/index.module.css";
 import buttonStyles from "../styles/button.module.css";
-import FaceCamera from "./FaceCamera";
-import FaceUi from "./FaceUi";
+import PalmCamera from "./PalmCamera";
+import PalmUi from "./PalmUi";
 
 interface Props {
-  onPhotoTaken: FaceCallback;
+  onPhotoTaken: PalmCallback;
   onError: (error: Error) => void;
   onBackClick: () => void;
 }
 
-function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
+function PalmCapture({ onPhotoTaken, onError, onBackClick }: Props) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const handlePhotoTaken: FaceCallback = async (imageData, content) => {
+  const handlePhotoTaken: PalmCallback = async (imageData, content) => {
     setIsButtonDisabled(false);
     onPhotoTaken(imageData, content);
   };
 
   const handleContinueDetection = () => {
     dispatchControlEvent(
-      FaceCustomEvent.CONTROL,
-      ControlEventInstruction.CONTINUE_DETECTION
+      PalmCustomEvent.CONTROL,
+      ControlEventInstruction.CONTINUE_DETECTION,
     );
 
     setIsButtonDisabled(true);
@@ -40,7 +38,7 @@ function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
 
   return (
     <>
-      <h2>Face auto capture</h2>
+      <h2>Palm auto capture</h2>
       <div>
         <button className={buttonStyles.primary} onClick={onBackClick}>
           Go back
@@ -53,16 +51,17 @@ function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
           Continue detection
         </button>
       </div>
+      {/* parent container must have position: relative */}
       <div className={styles.container}>
-        <FaceCamera
-          cameraFacing="user"
+        <PalmCamera
+          cameraFacing="environment"
           onPhotoTaken={handlePhotoTaken}
           onError={onError}
         />
-        <FaceUi showCameraButtons />
+        <PalmUi showCameraButtons />
       </div>
     </>
   );
 }
 
-export default FaceAutoCapture;
+export default PalmCapture;

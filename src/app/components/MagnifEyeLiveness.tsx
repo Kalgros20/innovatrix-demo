@@ -1,46 +1,43 @@
-"use client";
-
-import type {
-  FaceCallback,
-  FaceComponentData,
-} from "@innovatrics/dot-face-auto-capture";
+import type { MagnifEyeLivenessCallback } from "@innovatrics/dot-magnifeye-liveness";
+import { useState } from "react";
 import {
   dispatchControlEvent,
-  FaceCustomEvent,
+  MagnifEyeCustomEvent,
   ControlEventInstruction,
-} from "@innovatrics/dot-face-auto-capture/events";
-import { useState } from "react";
+} from "@innovatrics/dot-magnifeye-liveness/events";
 import styles from "../styles/index.module.css";
 import buttonStyles from "../styles/button.module.css";
-import FaceCamera from "./FaceCamera";
-import FaceUi from "./FaceUi";
+import MagnifEyeLivenessCamera from "./MagnifEyeLivenessCamera";
+import MagnifEyeLivenessUi from "./MagnifEyeLivenessUi";
 
 interface Props {
-  onPhotoTaken: FaceCallback;
+  onComplete: MagnifEyeLivenessCallback;
   onError: (error: Error) => void;
   onBackClick: () => void;
 }
 
-function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
+function MagnifEyeLiveness({ onBackClick, onComplete, onError }: Props) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const handlePhotoTaken: FaceCallback = async (imageData, content) => {
+  const handleOnComplete: MagnifEyeLivenessCallback = async (
+    imageData,
+    content,
+  ) => {
     setIsButtonDisabled(false);
-    onPhotoTaken(imageData, content);
+    onComplete(imageData, content);
   };
 
   const handleContinueDetection = () => {
     dispatchControlEvent(
-      FaceCustomEvent.CONTROL,
-      ControlEventInstruction.CONTINUE_DETECTION
+      MagnifEyeCustomEvent.CONTROL,
+      ControlEventInstruction.CONTINUE_DETECTION,
     );
 
     setIsButtonDisabled(true);
   };
-
   return (
     <>
-      <h2>Face auto capture</h2>
+      <h2>MagnifEye Liveness</h2>
       <div>
         <button className={buttonStyles.primary} onClick={onBackClick}>
           Go back
@@ -54,15 +51,14 @@ function FaceAutoCapture({ onPhotoTaken, onError, onBackClick }: Props) {
         </button>
       </div>
       <div className={styles.container}>
-        <FaceCamera
-          cameraFacing="user"
-          onPhotoTaken={handlePhotoTaken}
+        <MagnifEyeLivenessCamera
+          onComplete={handleOnComplete}
           onError={onError}
         />
-        <FaceUi showCameraButtons />
+        <MagnifEyeLivenessUi showCameraButtons />
       </div>
     </>
   );
 }
 
-export default FaceAutoCapture;
+export default MagnifEyeLiveness;
